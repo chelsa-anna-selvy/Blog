@@ -1,0 +1,44 @@
+{% extends 'sitevisitor/site_base.html' %}
+{% block title %}
+Blogger | Registration
+{% endblock %}
+{% block content %}
+<h4 class="mb-2">Adventure starts here 🚀</h4>
+              <p class="mb-4">Make your app management easy and fun!</p>
+
+              <form  class="mb-3" method="POST" enctype="multipart/form-data">
+                
+                  {% csrf_token %}
+                  <label class="mb-3" style="color:#6567fd;"><b>USER DETAILS</b></label>
+                  {% for field in form %}
+                      <div class="form-group mb-3">
+                          {{ field.label_tag }}
+                          {{ field }}
+                          {{ field.errors }}
+                      </div>
+                  {% endfor %}
+
+                  <label  class="mb-3" style="color:#6567fd;"><b> PROFILE DETAILS</b></label>
+
+                  {% for field in form1 %}
+                      <div class="form-group mb-3">
+                          {{ field.label_tag }}
+                          {{ field }}
+                          {{ field.errors }}
+                      </div>
+                  {% endfor %}                
+                
+
+                <div class="mb-3">
+                  
+                </div>
+                <button class="btn btn-primary d-grid w-100">Sign up</button>
+              </form>
+
+              <p class="text-center">
+                <span>Already have an account?</span>
+                <a href="{% url 'sitevisitor:sign_in' %}">
+                  <span>Sign in instead</span>
+                </a>
+              </p>
+{% endblock %}

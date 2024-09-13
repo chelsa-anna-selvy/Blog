@@ -1,0 +1,14 @@
+.form-radio-inline {
+    display: flex;
+    flex-direction: row;
+}
+
+.form-radio-inline label {
+    margin-right: 10px; /* Adjust the spacing as needed */
+    display: flex;
+    align-items: center;
+}
+
+.form-radio-inline input[type="radio"] {
+    margin-right: 5px; /* Adjust the spacing as needed */
+}

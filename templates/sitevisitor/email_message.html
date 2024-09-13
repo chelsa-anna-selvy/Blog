@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <style>
+        /* Inline styles for email compatibility */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+        th {
+            background-color: #5f61e6;
+            color: #ffffff;
+            font-size: 18px;
+        }
+        td {
+            font-size: 16px;
+        }
+        p {
+            margin: 0;
+        }
+        b {
+            color: #5f61e6;
+        }
+        .footer {
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th colspan="2">Reset Your Blogger Password</th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <p>Hi {{ name }},<br>
+                We are sending you this email because we received
+                a request from your side to reset your password.</p>
+            </td>
+        </tr>
+        <tr>
+            <td><p>Here is your OTP:</p></td>
+            <td><b>{{ otp }}</b></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <p>If you didn't initiate a password reset, kindly ignore
+                this mail and your password will not be reset.</p>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <p>Thank You<br> THE BLOGGER TEAM</p>
+            </th>
+        </tr>
+    </table>
+</body>
+</html>

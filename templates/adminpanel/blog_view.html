@@ -1,0 +1,100 @@
+{% extends 'adminpanel/admin_base.html' %}
+
+{% block title %}
+    Blogger | Admin | BlogView
+{% endblock %}
+
+{% block content %}
+<div class="row m-2">
+    <div class="col-md-10">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User / Blog /</span> {{blog.title}}</h4>
+    </div>
+    <div class="col-md-2">
+        {% if blog.status == 'PUBLISH' %}
+        <form method ="POST" action="{% url 'adminpanel:hide_blog' blog.id %}">
+          {% csrf_token %}
+          <input type="submit" class="btn btn-primary" value ='HIDE'/>
+        </form>
+        {% else %}
+        <form method ="POST" action="{% url 'adminpanel:show_blog' blog.id %}">
+          {% csrf_token %}
+          <input type="submit" class="btn btn-danger" value ='SHOW'/>
+        </form>
+        {% endif %}
+
+    </div>
+</div>
+    
+    <div class="row mb-5">
+        <div class="col-md-12 col-lg-12 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h5 class="card-title text-center">{{ blog.title }}</h5>
+                            <img class="card-img card-img-left m-2 mx-auto d-block" src="{{ blog.blog_image.url }}" alt="{{ blog.id }}" style="width: 85%; "/>
+                            
+                            <p class="card-text mt-5"><small class="text-muted">WRITTEN BY: {{ blog.user.get_full_name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Published on: {{ blog.created_at }}</small></p>
+                            <p class="card-text mt-2 mb-2">{{ blog.description }}</p>
+                            <p class="card-text m-2"><small class="text-muted">Last Updated on: {{ blog.updated_at }}</small></p>
+                        </div>
+
+                        <div class="col-md-11 col-lg-11 m-3">
+                            <form method="post" class="mb-3">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        {% for field in form %}
+                                            <div class="form-group mb-3">
+                                                {{ field.label_tag }}
+                                                {{ field }}
+                                                {{ field.errors }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                        <input type="submit" value="POST" class="btn btn-primary mb-3"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-12">
+                            <h5 class="card-header">Previous Comments ({{ count }})</h5>
+                            <div class="card-body">
+                                <hr class="m-0" />
+                                <div class="demo-inline-spacing">
+                                    {% for comment in comments %}
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <p class="card-text"><small class="text-muted">Posted By: {{ comment.author.get_full_name }} on {{ comment.created_at }}</small></p>
+                                            <p class="card-title">{{ comment.comment }}</p>
+                                            <p class="card-text"><small class="text-muted">Last Updated on {{ comment.updated_at }}</small></p>
+                                        </div>
+                                        <div class="col-md-2">
+                                                {% if comment.status == 'SHOW' %}
+                                                <form method ="POST" action="{% url 'adminpanel:hide_comment' comment.id %}">
+                                                {% csrf_token %}
+                                                <input type="submit" class="btn btn-primary" value ='HIDE'/>
+                                                </form>
+                                                {% else %}
+                                                <form method ="POST" action="{% url 'adminpanel:show_comment' comment.id %}">
+                                                {% csrf_token %}
+                                                <input type="submit" class="btn btn-danger" value ='SHOW'/>
+                                                </form>
+                                                {% endif %}
+                                        
+                                        </div>
+                                    </div>
+                                        <hr class="m-0" />
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

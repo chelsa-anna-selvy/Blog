@@ -1,0 +1,109 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% block title %}
+    Blogger | Admin | AllBlogs
+{% endblock %}
+{% block content %}
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Admin /</span> Blogs</h4>
+<div class="row mb-5">
+    <div class="col-md-12 col-lg-12 mb-3">
+        <div>
+            <div class="card-body">
+                <!-- Horizontal -->
+                {% for blog in blogs %}
+                <div class="row mb-5">
+                    {% if forloop.counter|divisibleby:2 == 0 %}
+                    <div class="col-md">
+                        <div class="card mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img class="card-img card-img-left" src="{{ blog.blog_image.url }}" alt="{{ blog.id }}" />
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ blog.title }} <small class="text-muted">&nbsp;&nbsp;Written by :&nbsp; {{blog.user.username}}</small></h5> 
+                                        <p class="card-text">{{ blog.description|slice:":300" }}{% if blog.description|length > 300 %}...{% endif %}</p>
+
+                                        <p class="card-text"><small class="text-muted">Published on : {{ blog.created_at }}&nbsp;&nbsp;&nbsp;
+                                          {% if blog.created_at != blog.updated_at %}
+                                          Updated on : {{ blog.updated_at }}
+                                          {% endif %}
+                                        </small></p>
+                                        
+                                        <div class="row m-3">
+                                          
+                                          <div class="col-md-6 text-center">
+                                            <a href="{% url 'adminpanel:blog_view' blog.id %}" class="btn btn-warning">VIEW MORE</a>
+                                            </div>
+                                            <div class="col-md-6 text-center">
+                                            {% if blog.status == 'PUBLISH' %}
+                                            <form method ="POST" action="{% url 'adminpanel:hide_blog' blog.id %}">
+                                              {% csrf_token %}
+                                              <input type="submit" class="btn btn-primary" value ='HIDE'/>
+                                            </form>
+                                            {% else %}
+                                            <form method ="POST" action="{% url 'adminpanel:show_blog' blog.id %}">
+                                              {% csrf_token %}
+                                              <input type="submit" class="btn btn-danger" value ='SHOW'/>
+                                            </form>
+                                            {% endif %}
+
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-md">
+                        <div class="card mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ blog.title }} <small class="text-muted">&nbsp;&nbsp;Written by :&nbsp; {{blog.user.username}}</small></h5> 
+                                        <p class="card-text">{{ blog.description|slice:":300" }}{% if blog.description|length > 300 %}...{% endif %}</p>
+                                        <p class="card-text"><small class="text-muted">Published on : {{ blog.created_at }}&nbsp;&nbsp;&nbsp;
+                                          {% if blog.created_at != blog.updated_at %}
+                                          Updated on : {{ blog.updated_at }}
+                                          {% endif %}
+                                        </small></p>
+                                        <div class="row m-3">
+                                          
+                                          <div class="col-md-6 text-center">
+                                            <a href="{% url 'adminpanel:blog_view' blog.id %}" class="btn btn-warning">VIEW MORE</a>
+                                          </div>
+                                          <div class="col-md-6 text-center">
+                                          {% if blog.status == 'PUBLISH' %}
+                                            <form method ="POST" action="{% url 'adminpanel:hide_blog' blog.id %}">
+                                              {% csrf_token %}
+                                              <input type="submit" class="btn btn-primary" value ='HIDE'/>
+                                            </form>
+                                            {% else %}
+                                            <form method ="POST" action="{% url 'adminpanel:show_blog' blog.id %}">
+                                              {% csrf_token %}
+                                              <input type="submit" class="btn btn-danger" value ='SHOW'/>
+                                            </form>
+                                            {% endif %}
+
+                                          </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <img class="card-img card-img-left" src="{{ blog.blog_image.url }}" alt="{{ blog.id }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <!--/ Horizontal -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

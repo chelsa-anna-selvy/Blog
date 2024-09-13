@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="light-style"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="{% static 'assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Blogger | Home </title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon/favicon.ico' %}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{% static 'assets/js/config.js' %}"></script>
+  </head>
+
+  <body>
+    <!-- Content -->
+  
+    <nav class="navbar navbar-expand-lg" style="background-color: #5f61e6;" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" style="color:white" href="#">Blogger</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'sitevisitor:home' %}" style="color:white">Home</a>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="#" style="color:white">About</a>
+            </li> -->
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'sitevisitor:sign_in' %}" style="color:white">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'sitevisitor:sign_up' %}" style="color:white">Register</a>
+            </li>
+           
+            <!-- <li class="nav-item">
+              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+            </li> -->
+          </ul>
+          <!-- <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-secondary" style=" background-color:#8688ff;color: white;border:1px solid white" type="submit">Search</button>
+          </form> -->
+        </div>
+      </div>
+    </nav>
+    <!-- / Content -->
+ <!-- Content wrapper -->
+ <div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Blogger /</span> Trending Blogs</h4>
+     
+    <!-- Horizontal -->
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            
+        {% endfor %}
+    </div>
+{% endif %}
+    {% for blog in blogs %}
+    <div class="row mb-5">
+        {% if forloop.counter|divisibleby:2 == 0 %}
+        <div class="col-md">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img class="card-img card-img-left" src="{{ blog.blog_image.url }}" alt="{{ blog.id }}" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ blog.title }}</h5>
+                            <p class="card-text"><small class="text-muted">WRITTEN BY:{{ blog.user.first_name }}&nbsp;&nbsp;{{ blog.user.last_name }}&nbsp;&nbsp;Published on : {{ blog.created_at }}</small></p>
+                            <p class="card-text">{{ blog.description|slice:":500" }}{% if blog.description|length > 500 %}<a href="{% url 'sitevisitor:sign_in' %}" class="btn btn-primary m-3">Continue Reading</a>{% endif %}</p>
+                            <p class="card-text"><small class="text-muted">Updated on : {{ blog.updated_at }}</small></p>
+                            </small></p>
+                           </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-md">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ blog.title }}</h5>                            
+                            <p class="card-text"><small class="text-muted">WRITTEN BY:{{ blog.user.first_name }}&nbsp;&nbsp;{{ blog.user.last_name }}&nbsp;&nbsp;Published on : {{ blog.created_at }}</small></p>
+                            <p class="card-text">{{ blog.description|slice:":500" }}{% if blog.description|length > 500 %}&nbsp;<a href="{% url 'sitevisitor:sign_in' %}" class="btn btn-primary m-3">Continue Reading</a>{% endif %}</p>
+                            <p class="card-text"><small class="text-muted">Updated on : {{ blog.updated_at }}</small></p>
+                           
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <img class="card-img card-img-left" src="{{ blog.blog_image.url }}" alt="{{ blog.id }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <!--/ Horizontal -->
+    
+     
+
+     
+    </div>
+    <!-- / Content -->
+    
+   
+
+    <div class="content-backdrop fade"></div>
+  </div>
+  <!-- Content wrapper -->
+    
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <!-- Page JS -->
+    
+    <script src="{% static 'js/toast.js' %}"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js' %}"></script>
+  </body>
+</html>

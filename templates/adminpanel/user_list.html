@@ -1,0 +1,225 @@
+{% extends 'adminpanel/admin_base.html' %}
+{% load static %}
+{% block title %}
+Blogger | Admin | 
+{% endblock %}
+
+{% block content %}
+ <!-- Bootstrap Table with Header - Dark -->
+ <div class="card">
+    <h5 class="card-header">User Lists</h5>   
+
+    <div class="col-xl-12">
+        <div class="nav-align-top mb-4">
+          <ul class="nav nav-tabs nav-fill" role="tablist">
+            <li class="nav-item">
+              <button
+                type="button"
+                class="nav-link active"
+                role="tab"
+                data-bs-toggle="tab"
+                data-bs-target="#navs-justified-home"
+                aria-controls="navs-justified-home"
+                aria-selected="true"
+              >
+                <i class="tf-icons bx bxs-user"></i> All Users
+                <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-danger">{{count}}</span>
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                type="button"
+                class="nav-link"
+                role="tab"
+                data-bs-toggle="tab"
+                data-bs-target="#navs-justified-profile"
+                aria-controls="navs-justified-profile"
+                aria-selected="false"
+              >
+                <i class="tf-icons bx bxs-user-plus"></i> Active Users
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                type="button"
+                class="nav-link"
+                role="tab"
+                data-bs-toggle="tab"
+                data-bs-target="#navs-justified-messages"
+                aria-controls="navs-justified-messages"
+                aria-selected="false"
+              >
+                <i class="bx bxs-user-minus"></i> Inactive Users
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
+                <div class="table-responsive text-nowrap">
+                    <table class="table">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>FirstName</th>
+                          <th>LastName</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Status</th>
+                          <td>Action</td>
+                        </tr>
+                      </thead>
+                      <tbody class="table-border-bottom-0">
+                        {% if all_users %}
+                        {% for user in all_users %}
+                          <tr>
+                              <td>
+                                <i class="fab fa-bootstrap fa-lg text-primary me-3"></i> <strong>{{user.user.first_name|upper}}</strong>
+                              </td>
+                              <td><strong>{{user.user.last_name|upper}}</strong></td>
+                              
+                              <td><label>{{user.user.email}}</label></td>
+                              
+                                <td><label>{{user.phone}}</label></td>
+                                {% if user.user.is_active %}
+                                <td><label class="badge bg-label-success"><strong> Active</strong></label></td>
+                                {% else %}
+                                <td><label class="badge bg-label-danger"><strong> Inactive</strong></label></td>
+                                {% endif %}
+                              <td>
+                                <div class="dropdown">
+                                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                  </button>
+                                  <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{% url 'adminpanel:view_user' user.user.id %}"
+                                      ><i class="bx bx-edit-alt me-1"></i> View Profile</a
+                                    >
+                                    <a class="dropdown-item" href="{% url 'adminpanel:user_blogs' user.user.id %}"
+                                      ><i class="bx bx-table me-1"></i>View Blogs</a
+                                    >
+                                  </div>
+                                </div>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                          {% else %}
+                        <tr><td colspan="6" class="text-center"><p>No records to display</p></td></tr>
+                      {% endif %}
+                      </tbody>
+                    </table>
+                  </div>
+            </div>
+            <div class="tab-pane fade" id="navs-justified-profile" role="tabpanel">
+                <div class="table-responsive text-nowrap">
+                  <table class="table">
+                    <thead class="table-dark">
+                      <tr>
+                        <th>FirstName</th>
+                        <th>LastName</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <td>Action</td>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      {% if  active_users %}
+                        {% for user in active_users %}
+                          <tr>
+                            <td>
+                              <i class="fab fa-bootstrap fa-lg text-primary me-3"></i> <strong>{{user.user.first_name|upper}}</strong>
+                            </td>
+                            <td><strong>{{user.user.last_name|upper}}</strong></td>
+                            
+                            <td><label>{{user.user.email}}</label></td>
+                            
+                              <td><label>{{user.phone}}</label></td>
+                                
+                              <td>
+                                <div class="dropdown">
+                                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                  </button>
+                                  <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{% url 'adminpanel:view_user' user.user.id %}"
+                                      ><i class="bx bx-edit-alt me-1"></i> View Profile</a
+                                    >
+                                    <a class="dropdown-item" href="{% url 'adminpanel:user_blogs' user.user.id %}"
+                                      ><i class="bx bx-table me-1"></i>View Blogs</a
+                                    >
+                                    <form method="POST" action="{% url 'adminpanel:deactivate_user' user.user.id %}">
+                                      {% csrf_token %}
+                                      <button type="submit" class="dropdown-item">
+                                        <i class="bx bx-cog me-1"></i> Deactivate
+                                      </button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                      {% else %}
+                        <tr><td colspan="6" class="text-center"><p>No records to display</p></td></tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                  </div>
+            </div>
+            <div class="tab-pane fade" id="navs-justified-messages" role="tabpanel">
+                <div class="table-responsive text-nowrap">
+                  <table class="table">
+                    <thead class="table-dark">
+                      <tr>
+                        <th>FirstName</th>
+                        <th>LastName</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <td>Action</td>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      {% if inactive_users %}
+                      {% for user in inactive_users %}
+                        <tr>
+                            <td>
+                              <i class="fab fa-bootstrap fa-lg text-primary me-3"></i> <strong>{{user.user.first_name|upper}}</strong>
+                            </td>
+                            <td><strong>{{user.user.last_name|upper}}</strong></td>
+                            
+                            <td><label>{{user.user.email}}</label></td>
+                            
+                              <td><label>{{user.phone}}</label></td>
+                              
+                            <td>
+                              <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                  <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                  <a class="dropdown-item" href="{% url 'adminpanel:view_user' user.user.id %}"
+                                    ><i class="bx bx-edit-alt me-1"></i> View Profile</a>
+                                  <a class="dropdown-item" href="{% url 'adminpanel:user_blogs' user.user.id %}"
+                                    ><i class="bx bx-table me-1"></i>View Blogs</a>
+                                    <form method="POST" action="{% url 'adminpanel:activate_user' user.user.id %}">
+                                      {% csrf_token %}
+                                      <button type="submit" class="dropdown-item">
+                                        <i class="bx bx-cog me-1"></i> Activate
+                                      </button>
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                      <tr><td colspan="6" class="text-center"><p>No records to display</p></td></tr>
+                    {% endif %}
+                    </tbody>
+                  </table>
+                  </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <!--/ Bootstrap Table with Header Dark -->
+
+{% endblock %}
